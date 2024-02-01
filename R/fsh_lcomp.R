@@ -14,11 +14,11 @@ lcomp <- function(data, exp_meth = NULL) {
     # combined sex 'total' length comps
     lcomp <- data %>% 
       tidytable::drop_na() %>% 
-      tidytable::summarise(freq = sum(frequency), .by = c(year, length)) %>% # can also add a species grouping here
+      tidytable::summarise(freq = sum(frequency), .by = c(year, length, species)) %>%
       tidytable::mutate(tot_freq = sum(freq),
-                        lcomp = freq / tot_freq, .by = c(year)) %>% 
+                        lcomp = freq / tot_freq, .by = c(year, species)) %>% 
       tidytable::mutate(comp_type = 'total') %>% 
-      tidytable::select(year, comp_type, length, lcomp)
+      tidytable::select(year, species, comp_type, length, lcomp)
     # sex-specific length comps option
     # tidytable::bind_rows(data %>% 
     #                        tidytable::filter(sex != 'unknown') %>% 
@@ -35,15 +35,15 @@ lcomp <- function(data, exp_meth = NULL) {
     # combined sex 'total' length comps
     lcomp <- data %>%
       tidytable::drop_na() %>% 
-      tidytable::summarize(freq = sum(frequency), .by = c(year, total_weight, length)) %>% 
-      tidytable::mutate(tot_freq = sum(freq), .by = c(year, total_weight)) %>% 
+      tidytable::summarize(freq = sum(frequency), .by = c(year, species, trip_id, total_weight, length)) %>% 
+      tidytable::mutate(tot_freq = sum(freq), .by = c(year, species, trip_id, total_weight)) %>% 
       tidytable::mutate(t_lcomp = freq / tot_freq, # compute trip specific length comps
                         len_extrap = t_lcomp * total_weight) %>%  # compute weighted length frequencies per haul
-      tidytable::summarize(wtd_freq = sum(len_extrap), .by = c(year, length)) %>% 
-      tidytable::mutate(tot_wtd_freq = sum(wtd_freq), .by = c(year)) %>% 
-      tidytable::mutate(lcomp = wtd_freq / tot_wtd_freq, .by = c(year)) %>%   # compute catch weighted length composition
+      tidytable::summarize(wtd_freq = sum(len_extrap), .by = c(year, species, length)) %>% 
+      tidytable::mutate(tot_wtd_freq = sum(wtd_freq), .by = c(year, species)) %>% 
+      tidytable::mutate(lcomp = wtd_freq / tot_wtd_freq, .by = c(year, species)) %>%   # compute catch weighted length composition
       tidytable::mutate(comp_type = 'total') %>%
-      tidytable::select(year, comp_type, length, lcomp)
+      tidytable::select(year, species, comp_type, length, lcomp)
       # sex-specific length comps option
       # tidytable::bind_rows(data %>%
       #                        tidytable::drop_na() %>% 

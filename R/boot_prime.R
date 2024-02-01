@@ -9,8 +9,8 @@
 boot_prime <- function(data) {
   
   data %>% 
-    tidytable::select(year, species, prime_join) %>% 
+    tidytable::select(year, species, trip_id) %>% 
     tidytable::distinct() %>% 
-    tidytable::mutate(prime_join = sample(prime_join, .N, replace = TRUE),
+    tidytable::mutate(trip_id = sample(trip_id, .N, replace = TRUE),
                       .by = c(year, species))
 }
