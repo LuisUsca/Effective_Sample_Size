@@ -23,45 +23,28 @@ if(iters < 100){
 # read in data ----
 
 data <- vroom::vroom(here::here("data", "data.csv"),delim = ",") %>% 
-  dplyr::rename_with(tolower) # make all column names lower case
+  dplyr::rename_with(tolower) %>%  # make all column names lower case
+  tidytable::mutate(species = 1) # make a dummy variable to allow for multiple species (not sure if that's what the sp column is)
 
 
 # resample marginal comps
 fsh_iss(iters = iters, 
-        lfreq_data = lfreq, 
-        specimen_data = specimen, 
-        catch_data = catch, 
-        r_t = NULL, 
-        yrs = 2015, 
+        data = data, 
+        yrs = 0, 
         bin = 1, 
-        join = 'both', 
         exp_meth = 'marginal', 
-        boot_primes = TRUE, 
+        boot_trip = TRUE, 
         boot_lengths = TRUE, 
-        boot_ages = TRUE, 
-        al_var = FALSE, 
-        al_var_ann = FALSE, 
-        age_err = FALSE, 
-        region = area, 
         save = 'marg')
 
 # test expanded comps
 fsh_iss(iters = iters, 
-        lfreq_data = lfreq, 
-        specimen_data = specimen, 
-        catch_data = catch, 
-        r_t = NULL, 
-        yrs = 2015, 
+        data = data, 
+        yrs = 0, 
         bin = 1, 
-        join = 'both', 
         exp_meth = 'expanded', 
-        boot_primes = TRUE, 
+        boot_trip = TRUE, 
         boot_lengths = TRUE, 
-        boot_ages = TRUE, 
-        al_var = FALSE, 
-        al_var_ann = FALSE, 
-        age_err = FALSE, 
-        region = area, 
         save = 'exp')
 
 # For testing run time of 500 iterations ----
