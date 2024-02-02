@@ -12,8 +12,8 @@ source_files <- list.files(here::here("R"), "*.R$")
 map(here::here("R", source_files), source)
 
 # set number of desired bootstrap iterations (suggested here: 10 for testing, 500 for running)
-#iters = 500
-iters = 50
+iters = 500
+# iters = 50
 
 # for testing run time
 if(iters < 100){
@@ -25,7 +25,6 @@ if(iters < 100){
 data <- vroom::vroom(here::here("data", "data.csv"),delim = ",") %>% 
   dplyr::rename_with(tolower) %>%  # make all column names lower case
   tidytable::mutate(species = 1) # make a dummy variable to allow for multiple species (not sure if that's what the sp column is)
-
 
 # resample marginal comps
 fsh_iss(iters = iters, 

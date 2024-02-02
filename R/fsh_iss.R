@@ -55,7 +55,10 @@ fsh_iss <- function(iters = 1, data, yrs = NULL, bin = 1,
   .ess_size %>% 
     tidytable::summarise(iss = psych::harmonic.mean(ess, na.rm=T),
                          .by = c(year, species, comp_type)) %>% 
-    tidytable::filter(iss > 0) -> iss_size
+    tidytable::filter(iss > 0) %>% 
+    tidytable::left_join(data %>% 
+                           tidytable::drop_na() %>% 
+                           summarise(total_ss = sum(frequency), .by = c(year, species))) -> iss_size
 
   # write input sample size results
     vroom::vroom_write(.ess_size, here::here("output", paste0(save, "_iter_ess_sz.csv")), delim = ",")
